@@ -29,7 +29,6 @@ BuildRequires:	python%{pyver}dist(pytest-cov)
 BuildRequires:	python%{pyver}dist(pytest-mock)
 BuildRequires:	python%{pyver}dist(setuptools)
 BuildRequires:	python%{pyver}dist(setuptools-scm)
-BuildRequires:	python%{pyver}dist(tox)
 %endif
 
 
