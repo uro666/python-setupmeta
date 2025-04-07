@@ -19,11 +19,13 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	python%{pyver}dist(setuptools)
 BuildRequires:	python%{pyver}dist(setuptools-scm)
 BuildRequires:	python%{pyver}dist(hatchling)
+BuildRequires:	python%{pyver}dist(pdm-backend)
 BuildRequires:	python%{pyver}dist(pip)
 BuildRequires:	python%{pyver}dist(wheel)
 %if %{with test}
 BuildRequires:	python%{pyver}dist(mock)
 BuildRequires:	python%{pyver}dist(packaging)
+BuildRequires:	python%{pyver}dist(pdm-backend)
 BuildRequires:	python%{pyver}dist(pytest)
 BuildRequires:	python%{pyver}dist(pytest-cov)
 BuildRequires:	python%{pyver}dist(pytest-mock)
@@ -43,9 +45,6 @@ packaging.
 %autosetup -n %{module}-%{version} -p1
 # Remove bundled egg-info
 rm -rf %%{module}.egg-info
-sed -i '/build-backend\n/a \[project\]\nname = \"\%{module}"\nversion_tag = \"%{version}\"' pyproject.toml
-sed -i '/tag-date\n/a \[metadata\]\nversion = \"attr: %{version}\"' pyproject.toml
-
 
 %build
 %py_build
@@ -59,8 +58,8 @@ sed -i '/tag-date\n/a \[metadata\]\nversion = \"attr: %{version}\"' pyproject.to
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 # test_check_dependencies: requires a virtualenv
-# test_explain and test_version are flaky, disabled
-pytest -v tests/ # -k "not test_check_dependencies and not test_requirements" # and not test_explain and not test_version"
+# test_version and test_scenario require full git project with its versioning scheme, disabled
+pytest -v tests/ -k "not test_check_dependencies and not test_version and not test_scenario"
 %endif
 
 %files
